@@ -1,34 +1,3 @@
-# py-blockchain
-
-#### 生成requirements.txt文件
-```
-pip freeze > requirements.txt
-```
-
-#### 安装requirements.txt依赖
-```
-pip install -r requirements.txt
-```
-
-#### 需求环境
-###### 新建目录
-```
-mkdir lesson01
-cd lesson01
-```
-###### 安装 pipenv
-```
-pip install pipenv
-```
-###### 安装 flask 
-```
-pipenv install flask==0.12.2
-```
-###### 安装 request
-```
-pipenv install request==2.18.4
-```
-
 ### 区块
 
 ```
@@ -56,10 +25,16 @@ pipenv install request==2.18.4
         "amount":100
     }
     ```
+* 响应结果：
+    ```
+    {
+        "message": "Transaction will be added to Block 2"
+    }
+    ```    
 #### 获取所有的区块  
 * 请求地址：`http://127.0.0.1:5000/chain`
 * 请求方式：`GET`
-* 结果：
+* 响应结果：
     ```
     {
         "chain": [
@@ -134,7 +109,7 @@ pipenv install request==2.18.4
         "nodes":["https://127.0.0.1:5004"]
     }
     ```    
-* 响应参数：
+* 响应结果：
     ```
     {
         "message": "New nodes had added",
@@ -145,6 +120,25 @@ pipenv install request==2.18.4
         ]
     }
     ```        
+
+## 需求环境
+#### 新建目录
+```
+mkdir lesson01
+cd lesson01
+```
+#### 安装 pipenv
+```
+pip install pipenv
+```
+#### 安装 flask 
+```
+pipenv install flask==0.12.2
+```
+#### 安装 request
+```
+pipenv install request==2.18.4
+```    
 ## 错误
 错误1、`TypeError: 'dict' object is not callable`
 ```
