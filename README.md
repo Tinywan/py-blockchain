@@ -28,3 +28,21 @@ pipenv install flask==0.12.2
 ```
 pipenv install request==2.18.4
 ```
+
+###### 区块
+
+```
+{
+    "index":0, // 块索引
+    "timestamp:"", // 时间戳
+    "transactions":{ // 交易信息，一个数组
+        "sender":"",
+        "recipient":"",
+        "amount":"100.00"
+    },
+    "proof":"", // 工作量证明
+    "previous_hash":"" // 上一个区块的哈希值
+}
+```
+[Python新利器之pipenv](https://www.jianshu.com/p/00af447f0005)
+[Python新利器之pipenv](https://www.jianshu.com/p/00af447f0005)
