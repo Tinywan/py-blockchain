@@ -29,7 +29,7 @@ pipenv install flask==0.12.2
 pipenv install request==2.18.4
 ```
 
-###### 区块
+### 区块
 
 ```
 {
@@ -44,8 +44,8 @@ pipenv install request==2.18.4
     "previous_hash":"" // 上一个区块的哈希值
 }
 ```
-#### 接口调用
-###### 创建区块  
+## 接口调用  
+#### 创建区块    
 * 请求地址：`http://127.0.0.1:5000/transactions/new`
 * 请求方式：`POST`
 * 请求参数：
@@ -56,7 +56,7 @@ pipenv install request==2.18.4
         "amount":100
     }
     ```
-###### 获取所有的区块  
+#### 获取所有的区块  
 * 请求地址：`http://127.0.0.1:5000/chain`
 * 请求方式：`GET`
 * 结果：
@@ -100,8 +100,8 @@ pipenv install request==2.18.4
         "length": 7
     }
     ```
-###### 挖矿   
-* 请求地址：``http://127.0.0.1:5000/mine`
+#### 挖矿   
+* 请求地址：`http://127.0.0.1:5000/mine`
 * 请求方式：`GET`
 * 响应参数：
     ```
@@ -125,7 +125,26 @@ pipenv install request==2.18.4
         ]
     }
     ```    
-
+#### 注册节点   
+* 请求地址：`http://127.0.0.1:5000/node/register`
+* 请求方式：`POST`
+* 请求参数：
+    ```
+    {
+        "nodes":["https://127.0.0.1:5004"]
+    }
+    ```    
+* 响应参数：
+    ```
+    {
+        "message": "New nodes had added",
+        "total_nodes": [
+            "127.0.0.1:5001",
+            "127.0.0.1:5004",
+            "127.0.0.1:5002"
+        ]
+    }
+    ```        
 ## 错误
 错误1、`TypeError: 'dict' object is not callable`
 ```

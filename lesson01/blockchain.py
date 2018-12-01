@@ -17,6 +17,7 @@ import time
 from flask import Flask, Response, jsonify, request
 import uuid
 import hashlib
+from urllib.parse import urlparse
 
 
 class Blockchain:
@@ -24,8 +25,15 @@ class Blockchain:
         self.chain = []  # 链结构信息
         self.current_transactions = []  # 当前交易信息
         self.new_block(proof=100, previous_hash=1)
+        self.nodes = set()  # 节点 集合信息
 
+    # 注册节点
+    def register_node(self, address: str):
+        # http:://127.0.0.1:5001
+        parse_url = urlparse(address)
+        self.nodes.add(parse_url.netloc)
     # 新区块
+
     def new_block(self, proof, previous_hash):
         block = {
             'index': len(self.chain) + 1,
@@ -88,7 +96,6 @@ node_identifier = str(uuid.uuid4()).replace('-', '')
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
     values = request.get_json()
-
     # 检查POST数据
     required = ['sender', 'recipient', 'amount']
     if not all(k in values for k in required):
@@ -135,6 +142,23 @@ def full_chain():
     # flask提供了jsonify函数供用户处理返回的序列化json数据
     return jsonify(response), 200
 
+# 节点注册
+@app.route('/node/register', methods=['POST'])
+def register_node():
+    values = request.get_json()
+    nodes = values.get("nodes")
+    if nodes is None:
+        return "Error : Please supply valid list of nodes"
+
+    for node in nodes:
+        blockchain.register_node(node)
+
+    response = {
+        'message': 'New nodes had added',
+        'total_nodes': list(blockchain.nodes)
+    }
+    # flask提供了jsonify函数供用户处理返回的序列化json数据
+    return jsonify(response), 201
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
