@@ -139,6 +139,26 @@ pipenv install flask==0.12.2
 ```
 pipenv install request==2.18.4
 ```    
+## 知识点
+* import与from import使用及区别
+    * import语句 ： 
+        * 描述：在开始使用一个模块中的函数之前，必须用import语句导入该模块。
+        * 语法：`import module1[, module2[,... moduleN]]`
+        * 案例：使用random模块ranint() 函数
+            ```
+            import random
+            for i in range(5):
+            print(random.randint(1, 10))
+            ```
+    * from import语句 ： 
+        * 描述：这是导入模块的另一种形式，使用这种形式的 import 语句， 调用 模块中的函数时不需要 moduleName. 前缀
+        * 语法：`from moduleName import name1[, name2[, ... nameN]]|*`
+        * 案例：使用random模块ranint() 函数
+        ```
+        from random import *
+        for i in range(5):
+        print(randint(1, 10)) # 这里就不需要random.前缀了
+        ```     
 ## 错误
 错误1、`TypeError: 'dict' object is not callable`
 ```
