@@ -4,4 +4,4 @@ python:
 install:
   - pip install -q -e .
 script:
-  - python hello.py
+  - python test.py test
