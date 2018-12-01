@@ -11,10 +11,12 @@
 #     "proof":"", // 工作量证明
 #     "previous_hash":"" // 上一个区块的哈希值
 # }
-import hashlib
+
 import json
 import time
 from flask import Flask, Response, jsonify, request
+import uuid
+import hashlib
 
 
 class Blockchain:
@@ -30,7 +32,7 @@ class Blockchain:
             'timestamp': time.time(),
             'transactions': self.current_transactions,
             'proof': proof,
-            'previous_hash': previous_hash or self.hash(self.last_block())
+            'previous_hash': previous_hash or self.hash(self.chain[-1])
         }
 
         # 交易信息清空
@@ -47,12 +49,12 @@ class Blockchain:
                 "amount": amount
             }
         )
-        return self.last_block("index") + 1
+        return self.last_block['index'] + 1
 
     # 静态Hash
     @staticmethod
     def hash(block):
-        block_string = json.dumps(block, sort_keys=True)
+        block_string = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
     # 最后一个区块
@@ -78,23 +80,25 @@ class Blockchain:
 # newPow.proof_of_work(100)
 
 app = Flask(__name__)
-blockchacin = Blockchain()
+blockchain = Blockchain()
+node_identifier = str(uuid.uuid4()).replace('-', '')
 # 产生交易 http://127.0.0.1:5000/transactions/new
 
 
 @app.route('/transactions/new', methods=['POST'])
-def new_transactions():
+def new_transaction():
     values = request.get_json()
-    required = ['sender', 'recipient', 'amount']
 
-    if values is None:
-        return "Values is Null", 400
+    # 检查POST数据
+    required = ['sender', 'recipient', 'amount']
     if not all(k in values for k in required):
-        return "Missind values", 400
-    index = blockchacin.new_transaction(
+        return 'Missing values', 400
+
+    # Create a new Transaction
+    index = blockchain.new_transaction(
         values['sender'], values['recipient'], values['amount'])
 
-    response = {"message": f'Transactions will be added to Block {index}'}
+    response = {'message': f'Transaction will be added to Block {index}'}
     return jsonify(response), 201
 
 # 挖矿
@@ -102,16 +106,31 @@ def new_transactions():
 
 @app.route('/mine', methods=['GET'])
 def mine():
-    return "This Will A New Mine"
+    # 工作量证明：获取上一个块的工作量证明
+    last_block = blockchain.last_block
+    last_proof = last_block['proof']
+    proof = blockchain.proof_of_work(last_proof)
 
-# 返回所有的区块链
+    # 给自己奖励
+    blockchain.new_transaction(sender="0", recipient=node_identifier, amount=1)
+    block = blockchain.new_block(proof, None)
+    response = {
+        "message": "New Block Forged",
+        'index': block['index'],
+        'transactions': block['transactions'],
+        'proof': block['transactions'],
+        'previous_hash': block['previous_hash']
+    }
+    return jsonify(response), 200
+
+# 所有的区块
 
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
     response = {
-        'chain': blockchacin.chain,
-        'length': len(blockchacin.chain)
+        'chain': blockchain.chain,
+        'length': len(blockchain.chain)
     }
     # flask提供了jsonify函数供用户处理返回的序列化json数据
     return jsonify(response), 200
