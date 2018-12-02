@@ -135,10 +135,14 @@ pip install pipenv
 ```
 pipenv install flask==0.12.2
 ```
+> Windows 环境 `pip install flask`  
+
 #### 安装 request
 ```
 pipenv install request==2.18.4
-```    
+```
+> Windows 环境 `pip install request`      
+
 ## 知识点
 * import与from import使用及区别
     * import语句 ： 
